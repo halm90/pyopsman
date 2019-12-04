@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# personal favorites
+*.pyc
+.*.swp
+tags
+
 # C extensions
 *.so
 
