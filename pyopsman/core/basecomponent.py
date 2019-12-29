@@ -5,6 +5,7 @@
 #
 #      Licensed under the GNU General Purpose License.
 #
+from pyopsman.core.requestors import HttpRequestor
 
 class BaseComponent():
     """Defines the base class for each component."""
@@ -18,7 +19,7 @@ class BaseComponent():
         """
         self._requestor = requestor
 
-    def __call__(self, **parameters: dict) -> BaseComponent:
+    def __call__(self, **parameters: dict):
         """ Gets a properly built request and queries the Requestor.
 
         :param parameters:  URL query parameters
@@ -33,7 +34,7 @@ class BaseComponent():
             return self._inner_getattr(endpoint, **parameters)
         return handler
 
-    def _inner_getattr(self, endpoint: str, **parameters: dict): -> BaseComponent
+    def _inner_getattr(self, endpoint: str, **parameters: dict):
         """ Gets a properly built request and queries the Requestor.
 
         :param endpoint:    the endpoint path (without parameters)

@@ -24,8 +24,8 @@ class PyOpsmanClient():
         self._requestor = HttpRequestor(self._url, self._port,
                                         self._ops_user, self._pwd)
 
-        import pdb;pdb.set_trace()  # REMOVE_ME
         # Instantiate the class for each main operation
         for module, (package, component) in import_list.items():
-            imported = importlib.import_module(module, package=package_name)
-            self.package = imported(self._requestor)
+            imported = importlib.import_module(module, package=package)
+            # WIP / ERROR / can't use component in next line like that
+            self.package = imported.component(self._requestor)
