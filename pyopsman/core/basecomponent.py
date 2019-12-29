@@ -10,7 +10,7 @@ class BaseComponent():
     """Defines the base class for each component."""
     base_url = None
 
-    def __init__(self, requestor: HttpRequestor) -> BaseComponent:
+    def __init__(self, requestor: HttpRequestor):
         """ Constructor only contains an instance of HttpRequestor.
 
         :param requestor:   instance of an HTTP request manager

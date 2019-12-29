@@ -15,7 +15,7 @@ class HttpRequestor(object):
 
     def __init__(self, url: str, port: int, user: str, pwd: str,
                  *,
-                 warn: bool = False) -> HttpRequestor:
+                 warn: bool = False):
         """ Opsman constructor, requires information regarding the admin
         API server provided by opsman
 
