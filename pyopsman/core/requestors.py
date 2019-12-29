@@ -31,7 +31,7 @@ class HttpRequestor():
         self._pwd = pwd
         self._warn = warn
 
-    def request(self, req_url: str, *,
+    def request(self, url: str, *,
                 data: dict=None, json: dict = None, method: str = 'GET') -> str:
         """ Builds a request and fetches its response from the targeted opsman.
         Returns a JSON encoded string. SSL verification is disabled.
@@ -46,14 +46,14 @@ class HttpRequestor():
             requests.urllib3.disable_warnings()
 
         api_call = '{url}:{port}/{call}'.format(url=self._url,
-                                                port=self._port, call=req_url
+                                                port=self._port, call=url
                                                )
 
         response = requests.request(verify=False, method=method,
                                     url=api_call,
                                     data=data,
                                     json=json,
-                                    auth=(self.user, self.key),
+                                    auth=(self._user, self._pwd),
                                    )
 
         if response.status_code == 200:
