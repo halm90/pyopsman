@@ -8,6 +8,7 @@
 
 """
 import importlib
+from logzero import logger
 
 # See the comment in __init__ below.  This table allows adding a
 # module without altering this module's code and without repeating
@@ -27,6 +28,9 @@ class PyOpsmanClient():
         self._ops_user = user
         self._pwd = pwd
 
+        logger.debug("PyOpsmanClient instantiating HttpRequestor " +
+                     "url: %s, port %d, user: %s, pwd: <redacted>",
+                     url, port, user)
         self._requestor = HttpRequestor(self._url, self._port,
                                         self._ops_user, self._pwd)
 
@@ -42,7 +46,10 @@ class PyOpsmanClient():
         # For example:
         #   > myclient = PyOpsman("url", 42, "myuser", "mypasswd")
         #   > myclient.auth.authenticate(args)
+        logger.debug("PyOpsmanClient importing components")
         for module, (component, package) in import_list.items():
+            logger.debug("PyOpsmanClient: from %s import %s as %s",
+                         module, component, package)
             imported = importlib.import_module(module, package=package)
             cmd = "imported.{}(self._requestor)".format(component)
             exec("self.{} = {}".format(package, cmd))

@@ -5,6 +5,7 @@
 #
 #      Licensed under the GNU General Purpose License.
 #
+from logzero import logger
 from pyopsman.core.requestors import HttpRequestor
 
 class BaseComponent():
@@ -17,6 +18,7 @@ class BaseComponent():
         :param requestor:   instance of an HTTP request manager
         :rtype:             BaseComponent
         """
+        logger.debug("BaseComponent initializing")
         self._requestor = requestor
 
     def __call__(self, **parameters: dict):
@@ -71,4 +73,5 @@ class BaseComponent():
                                                              else '?',
                                                    key=key, value=value)
         request['url'] = url
+        logger.debug("BaseComponent._build_request: built %s", request)
         return request
