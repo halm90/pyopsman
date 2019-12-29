@@ -1,15 +1,21 @@
 #!/usr/bin/env python
 # -*- coding:utf8 -*-
-#
-#      Copyright 2019, Hal Moroff
-#
-#      Licensed under the GNU General Purpose License.
-#
+"""
 
-#from pyopsman.components.admin import Admin
+      Copyright 2019, Hal Moroff
+
+      Licensed under the GNU General Purpose License.
+
+"""
 import importlib
 
-import_list = {"pyopsman.components.admin": ("admin", "Admin"),
+# See the comment in __init__ below.  This table allows adding a
+# module without altering this module's code and without repeating
+# module/package/class names
+#
+# The format is:
+#  <module import path> : (<module class/package name>, <local/reference name>)
+import_list = {"pyopsman.components.admin": ("Admin", "admin"),
               }
 
 from pyopsman.core.requestors import HttpRequestor
@@ -25,7 +31,18 @@ class PyOpsmanClient():
                                         self._ops_user, self._pwd)
 
         # Instantiate the class for each main operation
-        for module, (package, component) in import_list.items():
+        # This allows us to add new modules by simply adding them to the
+        # "import_list" above.  Loop through each list entry:
+        #    - import the module
+        #    - instantiate the module class
+        #    - assign the instantiated class to a class variable
+        # The caller can then do this:
+        #   > myclient = PyOpsmanClient(...args...)
+        #   > myclient.<module>.<module command
+        # For example:
+        #   > myclient = PyOpsman("url", 42, "myuser", "mypasswd")
+        #   > myclient.auth.authenticate(args)
+        for module, (component, package) in import_list.items():
             imported = importlib.import_module(module, package=package)
-            # WIP / ERROR / can't use component in next line like that
-            self.package = imported.component(self._requestor)
+            cmd = "imported.{}(self._requestor)".format(component)
+            exec("self.{} = {}".format(package, cmd))
