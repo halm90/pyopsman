@@ -8,7 +8,7 @@
 import requests
 
 
-class HttpRequestor(object):
+class HttpRequestor():
     """
     Defines a basic REST API client to be extended by components.
     """
@@ -32,7 +32,7 @@ class HttpRequestor(object):
         self._warn = warn
 
     def request(self, req_url: str, *,
-                data: dict=None, json: dict = None, method: str = 'GET'): -> str
+                data: dict=None, json: dict = None, method: str = 'GET') -> str:
         """ Builds a request and fetches its response from the targeted opsman.
         Returns a JSON encoded string. SSL verification is disabled.
         Simply put: this method works as a request.requests() wrapper.
