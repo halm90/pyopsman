@@ -6,5 +6,5 @@
 #      Licensed under the GNU General Purpose License.
 #
 
-__all__ = ['admin',
+__all__ = ['admin', 'uaa',
           ]

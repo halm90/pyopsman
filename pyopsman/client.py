@@ -16,7 +16,9 @@ from logzero import logger
 #
 # The format is:
 #  <module import path> : (<module class/package name>, <local/reference name>)
-import_list = {"pyopsman.components.admin": ("Admin", "admin"),
+import_list = {
+               "pyopsman.components.admin": ("Admin", "admin"),
+               "pyopsman.components.uaa": ("UAA", "uaa"),
               }
 
 from pyopsman.core.requestors import HttpRequestor
