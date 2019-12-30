@@ -34,8 +34,8 @@ class PyOpsmanClient():
         self._version = version
 
         logger.debug("PyOpsmanClient instantiating HttpRequestor " +
-                     "url: %s, port %d, user: %s, pwd: <redacted>",
-                     url, port, user)
+                     "url: %s, port: %s, user: %s, pwd: <redacted>",
+                     url, str(port), user)
         self._requestor = HttpRequestor(self._url, self._ops_user, self._pwd,
                                         version = self._version,
                                         port = self._port)
