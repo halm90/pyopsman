@@ -28,7 +28,7 @@ class HttpRequestor():
         :param warn:        enable/disable warnings
         """
         logger.debug("HttpRequestor initializing " +
-                     "url: %s, port %s, user: %s, pwd: <redacted>, " +
+                     "url: %s, port: %s, user: %s, pwd: <redacted>, " +
                      "version: %s, warn: %s",
                      url, str(port), user, version, warn)
         self._url = url
