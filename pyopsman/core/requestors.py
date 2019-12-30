@@ -6,6 +6,7 @@
 #      Licensed under the GNU General Purpose License.
 #
 import requests
+from requests import urllib3
 from logzero import logger
 
 
@@ -14,23 +15,34 @@ class HttpRequestor():
     Defines a basic REST API client to be extended by components.
     """
 
-    def __init__(self, url: str, port: int, user: str, pwd: str,
+    def __init__(self, url: str, user: str, pwd: str,
                  *,
+                 port: int = None,
+                 version: str = None,
                  warn: bool = False):
         """ Opsman constructor, requires information regarding the admin
         API server provided by opsman
 
         :param url:         the opsman admin url
-        :param port:        TCP opsman target port
         :param user:        admin API user
         :param pwd:         admin user password
+        :param port:        TCP opsman target port
         :param warn:        enable/disable warnings
         """
         logger.debug("HttpRequestor initializing " +
-                     "url: %s, port %d, user: %s, pwd: <redacted>, warn: %s",
-                     url, port, user, warn)
+                     "url: %s, port %s, user: %s, pwd: <redacted>, " +
+                     "version: %s, warn: %s",
+                     url, str(port), user, version, warn)
         self._url = url
         self._port = port
+        parsed = urllib3.util.url.parse_url(self._url)
+        if self._port and not parsed.port:
+            self._url = "{}://{}:{}{}".format(parsed.scheme,
+                                              parsed.host,
+                                              self._port,
+                                              parsed.path
+                                             )
+        self._url += "/api/{}".format(version) if version else ""
         self._user = user
         self._pwd = pwd
         self._warn = warn
@@ -50,10 +62,9 @@ class HttpRequestor():
             logger.debug("HttpRequestor.request: disable warnings")
             requests.urllib3.disable_warnings()
 
-        api_call = '{url}:{port}/{call}'.format(url=self._url,
-                                                port=self._port, call=url
-                                               )
-
+        api_call = '{url}/{call}'.format(url=self._url,
+                                         call=url
+                                        )
         logger.debug("HttpRequestor.request: %s", api_call)
         try:
             response = requests.request(verify=False, method=method,

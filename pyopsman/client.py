@@ -22,17 +22,21 @@ import_list = {"pyopsman.components.admin": ("Admin", "admin"),
 from pyopsman.core.requestors import HttpRequestor
 
 class PyOpsmanClient():
-    def __init__(self, url: str, port: int, user: str, pwd: str):
+    def __init__(self, url: str, user: str, pwd: str,
+                 *,
+                 port: int = None, version: str = "v0" ):
         self._url = url
         self._port = port
         self._ops_user = user
         self._pwd = pwd
+        self._version = version
 
         logger.debug("PyOpsmanClient instantiating HttpRequestor " +
                      "url: %s, port %d, user: %s, pwd: <redacted>",
                      url, port, user)
-        self._requestor = HttpRequestor(self._url, self._port,
-                                        self._ops_user, self._pwd)
+        self._requestor = HttpRequestor(self._url, self._ops_user, self._pwd,
+                                        version = self._version,
+                                        port = self._port)
 
         # Instantiate the class for each main operation
         # This allows us to add new modules by simply adding them to the
