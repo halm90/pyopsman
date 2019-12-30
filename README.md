@@ -18,7 +18,7 @@ Sample use:
 ```
 from pyopsman.client import PyOpsmanClient
 
-client = PyOpsmanClient("http://foo/bar", "me", "passwd", port=42)
+client = PyOpsmanClient("http://foo/bar", "me", "passwd"[, port=42])
 
 try:
     client.uaa.expiration()
