@@ -25,3 +25,10 @@ try:
 except Exception as exn:
     print("uaa expiration request exception: {}".format(exn))
 ```
+
+## TODO
+* Add header capability to request
+* Get token, add to header
+* Add (empty) bodies for major command groups (as in UAA)
+* Add specific major commands to command groups
+* Unit tests
