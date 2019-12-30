@@ -40,7 +40,7 @@ class HttpRequestor():
             self._url = "{}://{}:{}{}".format(parsed.scheme,
                                               parsed.host,
                                               self._port,
-                                              parsed.path
+                                              parsed.path if parsed.path else ""
                                              )
         self._url += "/api/{}".format(version) if version else ""
         self._user = user
@@ -94,7 +94,7 @@ class HttpRequestor():
             logger.error("HttpRequestor.request failed %d: " +
                          "reason <%s> url <%s>",
                          response.status_code, response.reason,
-                         reponse.request.url)
+                         response.request.url)
             return {'reason': response.reason,
                     'status_code': response.status_code,
                     'url': response.request.url}
