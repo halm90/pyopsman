@@ -14,7 +14,8 @@ Architecture is borrowed from cloudianapi by Romero Galiza Jr.
 ## Usage
 
 Sample use:
-`
+
+```
 from pyopsman.client import PyOpsmanClient
 
 client = PyOpsmanClient("http://foo/bar", "me", "passwd", port=42)
@@ -23,4 +24,4 @@ try:
     client.uaa.expiration()
 except Exception as exn:
     print("uaa expiration request exception: {}".format(exn))
-`
+```
