@@ -48,11 +48,12 @@ class HttpRequestor():
         Returns a JSON encoded string. SSL verification is disabled.
         Simply put: this method works as a request.requests() wrapper.
 
-        :param url:     the endpoint with all parameters to GET request
-        :param port:    optional port
-        :param data:    file-like object to send in the body of the request
-        :param json:    json data to send in the body of the request
-        :param method:  HTTP method (GET, POST, HEAD, DELETE, etc)
+        :param url:         the endpoint with all parameters to GET request
+        :param port:        optional port
+        :param use_version: add "/api/<version>" to target url
+        :param data:        file-like object to send in the body of the request
+        :param json:        json data to send in the body of the request
+        :param method:      HTTP method (GET, POST, HEAD, DELETE, etc)
         """
         if not self._warn:
             logger.debug("HttpRequestor.request: disable warnings")
