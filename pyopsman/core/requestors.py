@@ -28,45 +28,63 @@ class HttpRequestor():
         :param warn:        enable/disable warnings
         """
         logger.debug("HttpRequestor initializing " +
-                     "url: %s, port %s, user: %s, pwd: <redacted>, " +
+                     "url: %s, port: %s, user: %s, pwd: <redacted>, " +
                      "version: %s, warn: %s",
                      url, str(port), user, version, warn)
         self._url = url
-        self._port = port
-        parsed = urllib3.util.url.parse_url(self._url)
-        if self._port and not parsed.port:
-            self._url = "{}://{}:{}{}".format(parsed.scheme,
-                                              parsed.host,
-                                              self._port,
-                                              parsed.path if parsed.path else ""
-                                             )
-        self._url += "/api/{}".format(version) if version else ""
+        self._parsed = urllib3.util.url.parse_url(self._url)
+        self._version = version
+        self._host = self._parsed.host
+        # Port is given port or port in given url (given overrides)
+        self._port = port or self._parsed.port
         self._user = user
         self._pwd = pwd
         self._warn = warn
 
-    def request(self, url: str, *,
-                data: dict=None, json: dict = None, method: str = 'GET') -> str:
+    def request(self,
+                url: str,
+                *,
+                port: int=None,
+                use_version: bool=True,
+                data: dict=None,
+                json: dict=None,
+                method: str='GET',
+                request_args: dict={}) -> str:
         """ Builds a request and fetches its response from the targeted opsman.
         Returns a JSON encoded string. SSL verification is disabled.
         Simply put: this method works as a request.requests() wrapper.
 
-        :param req_url: the endpoint with all parameters to GET request
-        :param data:    file-like object to send in the body of the request
-        :param json:    json data to send in the body of the request
-        :param method:  HTTP method (GET, POST, HEAD, DELETE, etc)
+        :param url:         the endpoint with all parameters to GET request
+        :param port:        optional port
+        :param use_version: add "/api/<version>" to target url
+        :param data:        file-like object to send in the body of the request
+        :param json:        json data to send in the body of the request
+        :param method:      HTTP method (GET, POST, HEAD, DELETE, etc)
         """
         if not self._warn:
             logger.debug("HttpRequestor.request: disable warnings")
             requests.urllib3.disable_warnings()
 
-        api_call = '{url}/{call}'.format(url=self._url,
-                                         call=url
-                                        )
-        logger.debug("HttpRequestor.request: %s", api_call)
+        # Request port overrides object port for this request
+        # If neither object nor request specifies port, none is used
+        # If object specifies port but request speficies <= 0 then none is used
+        port = port or self._port
+        port = port if (port and port > 0) else None
+        host = "{}:{}".format(self._host, port) if port else self._host
+
+        vsn = self._version if request_args.get('use_version',True) == True else None
+        qry = self._parsed.query
+        full_url = '{host}{ver}{path}/{call}{query}'.format(
+                    host=host,
+                    ver="/api/{}".format(vsn) if vsn else "",
+                    path=self._parsed.path,
+                    call=url,
+                    query="?{}".format(qry) if qry else ""
+                   )
+        logger.debug("HttpRequestor.request: %s", full_url)
         try:
             response = requests.request(verify=False, method=method,
-                                        url=api_call,
+                                        url=full_url,
                                         data=data,
                                         json=json,
                                         auth=(self._user, self._pwd),
