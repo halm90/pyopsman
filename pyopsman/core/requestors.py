@@ -41,9 +41,15 @@ class HttpRequestor():
         self._pwd = pwd
         self._warn = warn
 
-    def request(self, url: str, *,
-                port: int=None, use_version: bool=True,
-                data: dict=None, json: dict = None, method: str = 'GET') -> str:
+    def request(self,
+                url: str,
+                *,
+                port: int=None,
+                use_version: bool=True,
+                data: dict=None,
+                json: dict=None,
+                method: str='GET',
+                request_args: dict={}) -> str:
         """ Builds a request and fetches its response from the targeted opsman.
         Returns a JSON encoded string. SSL verification is disabled.
         Simply put: this method works as a request.requests() wrapper.
@@ -66,15 +72,19 @@ class HttpRequestor():
         port = port if (port and port > 0) else None
         host = "{}:{}".format(self._host, port) if port else self._host
 
-        vsn = self._version if use_version == True else None
-        api_call = '{host}{ver}{path}/{call}'.format(host=host,
-                                                     ver="/api/{}".format(vsn) if vsn else "",
-                                                     path=self._parsed.path,
-                                                     call=url)
-        logger.debug("HttpRequestor.request: %s", api_call)
+        vsn = self._version if request_args.get('use_version',True) == True else None
+        qry = self._parsed.query
+        full_url = '{host}{ver}{path}/{call}{query}'.format(
+                    host=host,
+                    ver="/api/{}".format(vsn) if vsn else "",
+                    path=self._parsed.path,
+                    call=url,
+                    query="?{}".format(qry) if qry else ""
+                   )
+        logger.debug("HttpRequestor.request: %s", full_url)
         try:
             response = requests.request(verify=False, method=method,
-                                        url=api_call,
+                                        url=full_url,
                                         data=data,
                                         json=json,
                                         auth=(self._user, self._pwd),

@@ -7,10 +7,23 @@ from logzero import logger
 from pyopsman.core.requestors import HttpRequestor
 
 class BaseComponent():
-    """Defines the base class for each component."""
-    base_url = None
+    """
+    Defines the base class for each component.
 
-    def __init__(self, requestor: HttpRequestor):
+    Inheriting classes may override base_url for extensions to
+    the primary (opsman) endpoint url used when the client was
+    created.  If there's no override then the getattr override
+    will append the extension based on the client request
+    (ie: "<myclient>.<foobar>" will append "/foobar".
+
+    Inheriting classes may also override "request_args" with
+    a dictionary of arguments to be used by the request call
+    in the HttpRequestor.
+    """
+    base_url = None
+    request_args = dict()
+
+    def __init__(self, requestor: HttpRequestor, **kwargs):
         """ Constructor only contains an instance of HttpRequestor.
 
         :param requestor:   instance of an HTTP request manager
@@ -26,7 +39,7 @@ class BaseComponent():
         :rtype:             BaseComponent
         """
         request = self._build_request(**parameters)
-        return self._requestor.request(**request)
+        return self._requestor.request(**request, request_args=self.request_args)
 
     def __getattr__(self, endpoint: str):
         # closure, expects keyword argument unpacking:
@@ -58,14 +71,18 @@ class BaseComponent():
         :rtype:             dict
         """
 
-        request = {'method': parameters.pop('method', 'GET'),
-                   'data': parameters.pop('data', None),
-                   'json': parameters.pop('json', None)
-                  }
+        required_params = {'method': 'GET',
+                           'data': None,
+                           'json': None
+                          }
+        request = {k: parameters.pop(k,v) for k,v in required_params.items()}
+        # TODO
+        #request.update(parameters.pop('<extension??>', None)
 
         # url = {base_url}[/{endpoint}]
         url = '/'.join(filter(None, (self.__class__.base_url, endpoint)))
 
+        # Append query filter(s) (if any)
         for index, (key, value) in enumerate(parameters.items()):
             url += '{symbol}{key}={value}'.format(symbol='&' if index
                                                              else '?',
