@@ -6,6 +6,8 @@
 from logzero import logger
 from pyopsman.core.requestors import HttpRequestor
 
+#pylint: disable=bad-continuation, logging-not-lazy
+
 class BaseComponent():
     """
     Defines the base class for each component.
@@ -23,7 +25,7 @@ class BaseComponent():
     base_url = None
     request_args = dict()
 
-    def __init__(self, requestor: HttpRequestor, **kwargs):
+    def __init__(self, requestor: HttpRequestor, **kwargs): #pylint: disable=unused-argument
         """ Constructor only contains an instance of HttpRequestor.
 
         :param requestor:   instance of an HTTP request manager
@@ -75,7 +77,7 @@ class BaseComponent():
                            'data': None,
                            'json': None
                           }
-        request = {k: parameters.pop(k,v) for k,v in required_params.items()}
+        request = {k: parameters.pop(k, v) for k, v in required_params.items()}
         # TODO
         #request.update(parameters.pop('<extension??>', None)
 
