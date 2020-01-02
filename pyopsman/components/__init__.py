@@ -4,5 +4,6 @@
       Licensed under the GNU General Purpose License.
 """
 
-__all__ = ['admin', 'uaa',
+__all__ = ['admin', 'certificates', 'metadata', 'security',
+           'sessions', 'settings', 'uaa',
           ]

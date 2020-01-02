@@ -24,16 +24,15 @@ class UAA(BaseComponent):
         # "<base>/uaa/expiration".  This allows a substitution
         # so that the url is "<base>/uaa/tokens_expiration".
         self.expiration = UAAToken(requestor)
+        # TODO: get == GET, set == PUT
 
 
 class UAAToken(BaseComponent):
     """
-    This code is an example only (non-functional)
     Get the UAA token that the admin client will use
     """
     base_url = '/'.join([UAA.base_url, 'tokens_expiration'])
-    request_args = {'use_version': False}
 
     def __init__(self, requestor):
-        logger.debug("Initializing sub-component: UAAToken")
-        super().__init__(requestor, use_version=False)
+        logger.debug("Initializing UAA sub-component: UAAToken")
+        super().__init__(requestor)
