@@ -4,8 +4,6 @@
 
 Python library for accessing _opsman_.
 
-**This is a work-in-progress.**
-
 Class objects are instantiated which access the API as methods, masking the
 REST interface.
 

@@ -36,11 +36,11 @@ class HttpRequestor():
                      "version: %s, warn: %s",
                      url, str(port), user, version, warn)
         self._url = url
-        self._parsed = urllib3.util.url.parse_url(self._url)
+        parsed = urllib3.util.url.parse_url(self._url)
         self._version = version
-        self._host = self._parsed.host
+        self._host = parsed.host
         # Port is given port or port in given url (given overrides)
-        self._port = port or self._parsed.port
+        self._port = port or parsed.port
         self._user = user
         self._pwd = pwd
         self._warn = warn
@@ -73,13 +73,16 @@ class HttpRequestor():
         port = port or self._port
         port = port if (port and port > 0) else None
         host = "{}:{}".format(self._host, port) if port else self._host
+        parsed = urllib3.util.url.parse_url(self._url)
+        self._port = port or parsed.port
 
         vsn = self._version if request_args.get('use_version', True) else None
-        qry = self._parsed.query
-        full_url = '{host}{ver}{path}/{call}{query}'.format(
+        qry = parsed.query
+        full_url = '{scheme}://{host}{ver}{path}/{call}{query}'.format(
+                    scheme=parsed.scheme,
                     host=host,
                     ver="/api/{}".format(vsn) if vsn else "",
-                    path=self._parsed.path,
+                    path=parsed.path if parsed.path else "",
                     call=url,
                     query="?{}".format(qry) if qry else ""
                    )

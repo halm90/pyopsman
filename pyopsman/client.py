@@ -43,7 +43,7 @@ class PyOpsmanClient():
     """
     def __init__(self, url: str, user: str, pwd: str,
                  *,
-                 port: int = None, version: str = None):
+                 port: int = None, version: str = 'v0'):
         self._url = url
         self._port = port
         self._ops_user = user
