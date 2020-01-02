@@ -21,6 +21,11 @@ loglevel(os.environ.get('LOGLEVEL', logging.INFO).upper())
 #  <module import path> : (<module class/package name>, <local/reference name>)
 IMPORT_LIST = {
                "pyopsman.components.admin": ("Admin", "admin"),
+               "pyopsman.components.certificates": ("Certificates", "certificates"),
+               "pyopsman.components.metadata": ("Metadata", "metadata"),
+               "pyopsman.components.security": ("Security", "security"),
+               "pyopsman.components.sessions": ("Sessions", "sessions"),
+               "pyopsman.components.settings": ("Settings", "settings"),
                "pyopsman.components.uaa": ("UAA", "uaa"),
               }
 
