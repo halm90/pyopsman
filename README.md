@@ -9,7 +9,10 @@ Python library for accessing _opsman_.
 Class objects are instantiated which access the API as methods, masking the
 REST interface.
 
-Architecture is borrowed from cloudianapi by Romero Galiza Jr.
+Architecture heavily borrows from cloudianapi by Romero Galiza Jr.
+
+For *opsman* API documentation: https://docs.pivotal.io/pivotalcf/2-2/opsman-api
+(later versions may be available at the same site).
 
 ## Usage
 

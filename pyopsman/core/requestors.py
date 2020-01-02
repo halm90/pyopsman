@@ -20,8 +20,10 @@ class HttpRequestor():
                  port: int = None,
                  version: str = None,
                  warn: bool = False):
-        """ Opsman constructor, requires information regarding the admin
-        API server provided by opsman
+        """
+        Opsman constructor, requires information regarding the admin
+        API server provided by opsman.  These are the base parameters.
+        Additional parameters may be set by the component class.
 
         :param url:         the opsman admin url
         :param user:        admin API user
