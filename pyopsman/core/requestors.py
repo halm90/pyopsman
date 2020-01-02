@@ -7,6 +7,8 @@ import requests
 from requests import urllib3
 from logzero import logger
 
+#pylint: disable=bad-continuation, logging-not-lazy
+#pylint: disable=too-few-public-methods, too-many-instance-attributes
 
 class HttpRequestor():
     """
@@ -44,19 +46,17 @@ class HttpRequestor():
     def request(self,
                 url: str,
                 *,
-                port: int=None,
-                use_version: bool=True,
-                data: dict=None,
-                json: dict=None,
-                method: str='GET',
-                request_args: dict={}) -> str:
+                port: int = None,
+                data: dict = None,
+                json: dict = None,
+                method: str = 'GET',
+                request_args: dict = {}) -> str:
         """ Builds a request and fetches its response from the targeted opsman.
         Returns a JSON encoded string. SSL verification is disabled.
         Simply put: this method works as a request.requests() wrapper.
 
         :param url:         the endpoint with all parameters to GET request
         :param port:        optional port
-        :param use_version: add "/api/<version>" to target url
         :param data:        file-like object to send in the body of the request
         :param json:        json data to send in the body of the request
         :param method:      HTTP method (GET, POST, HEAD, DELETE, etc)
@@ -72,7 +72,7 @@ class HttpRequestor():
         port = port if (port and port > 0) else None
         host = "{}:{}".format(self._host, port) if port else self._host
 
-        vsn = self._version if request_args.get('use_version',True) == True else None
+        vsn = self._version if request_args.get('use_version', True) else None
         qry = self._parsed.query
         full_url = '{host}{ver}{path}/{call}{query}'.format(
                     host=host,
@@ -114,4 +114,3 @@ class HttpRequestor():
             return {'reason': response.reason,
                     'status_code': response.status_code,
                     'url': response.request.url}
-

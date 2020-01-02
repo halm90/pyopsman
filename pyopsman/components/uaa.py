@@ -6,6 +6,7 @@
 from logzero import logger
 from pyopsman.core.basecomponent import BaseComponent
 
+#pylint: disable=too-few-public-methods
 
 class UAA(BaseComponent):
     """
@@ -26,8 +27,10 @@ class UAA(BaseComponent):
 
 
 class UAAToken(BaseComponent):
-    # This code is an example only (non-functional)
-    # Get the UAA token that the admin client will use
+    """
+    This code is an example only (non-functional)
+    Get the UAA token that the admin client will use
+    """
     base_url = '/'.join([UAA.base_url, 'tokens_expiration'])
     request_args = {'use_version': False}
 
