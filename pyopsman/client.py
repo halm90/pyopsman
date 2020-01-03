@@ -10,7 +10,7 @@ from logzero import logger
 from logzero import loglevel
 from pyopsman.core.requestors import HttpRequestor
 
-loglevel(os.environ.get('LOGLEVEL', logging.INFO).upper())
+loglevel(os.environ.get('LOGLEVEL', 'INFO').upper())
 
 #pylint: disable=bad-continuation
 # See the comment in __init__ below.  This table allows adding a
@@ -43,7 +43,7 @@ class PyOpsmanClient():
     """
     def __init__(self, url: str, user: str, pwd: str,
                  *,
-                 port: int = None, version: str = None):
+                 port: int = None, version: str = 'v0'):
         self._url = url
         self._port = port
         self._ops_user = user
