@@ -1,5 +1,5 @@
 # pyopsman
-# Copyright 2019, Hal Moroff
+# Copyright 2019
 # Licensed under the GNU General Purpose License.
 
 Python library for accessing _opsman_.

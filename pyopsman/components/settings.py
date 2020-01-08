@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-      Copyright 2019, Hal Moroff
+      Copyright 2019
       Licensed under the GNU General Purpose License.
 """
 from logzero import logger
